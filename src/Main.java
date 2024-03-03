@@ -16,61 +16,68 @@ public class Main {
         ManipulacaoArquivo ma = new ManipulacaoArquivo();
         EstruturaDeDados<String> estrutura = null;
         
-        List<String> linhas;
-        List<String> dados = ma.lerArquivo("dados.txt");
+        List<String> lines = ma.lerArquivo("exec.txt");
+        List<String> datas = ma.lerArquivo("dados.txt");
 
-        linhas = ma.lerArquivo("exec.txt");
+        String estruturaDeDados = lines.remove(0);
 
-        String ed = linhas.get(0);
-
-        switch (ed){
+        switch (estruturaDeDados){
             case "lista":
                 System.out.println("Lista");
-                estrutura = new DoublyLinkedList<>(dados);
+                estrutura = new DoublyLinkedList<>(datas);
                 break;
             case "pilha":
                 System.out.println("Pilha");
-                //estrutura = new Stack<>(dados);
+                //estrutura = new Stack<>(datas);
                 break;
             case "fila":
                 System.out.println("Fila");
-                estrutura = new Queue<>(dados);
+                estrutura = new Queue<>(datas);
                 break;
             case "arvore":
                 System.out.println("Arvore");
-                estrutura = new Tree<>(dados);
+                estrutura = new Tree<>(datas);
                 break;
             default:
                 System.out.println("Estrutura errada [lista/pilha/fila/arvore]");
                 break;
         }
 
-        for(int i = 0; i < linhas.size(); i++){
-            if(i != 0){
-                if(linhas.get(i).contains(";")){
-                    String comando[] = linhas.get(i).split(";");
-                    switch(comando[0]){
-                        case "INSERIR":
-                            estrutura.add(comando[1]);
-                            break;
-                        case "REMOVER":
-                            String dado = estrutura.remove(comando[1]);
-                            if(dado != null){
-                                System.out.println("Item Removido: " + dado);
-                            }else{
-                                System.out.println("Remover Error: Item não encontrado! [" + comando[1] + "]");
-                            }
-                            break;
-                        case "BUSCAR":
-                            if(estrutura.seek(comando[1])){
-                                System.out.println("Esse dado contém na lista!");
-                            }else{
-                                System.out.println("Esse dado não contém na lista!");
-                            }
-                            break;
-                    }
-                }else{
+        for(String line : lines){
+
+            if(estrutura == null){
+                throw new RuntimeException("Estrutura não inicializada.");
+            }
+
+            if(line.contains(";")){
+                String[] operacao = line.split(";");
+                String comando = operacao[0], dado = operacao[1];
+
+                switch(comando){
+                    case "INSERIR":
+                        estrutura.add(dado);
+                        break;
+                    case "REMOVER":
+                        String dadoRemovido = estrutura.remove(dado);
+                        if(dado != null){
+                            System.out.println("Item Removido: " + dadoRemovido);
+                        }else{
+                            System.out.println("Remover Error: Item não encontrado! [" + dadoRemovido + "]");
+                        }
+                        break;
+                    case "BUSCAR":
+                        if(estrutura.seek(dado)){
+                            System.out.println("Esse dado contém na lista!");
+                        }else{
+                            System.out.println("Esse dado não contém na lista!");
+                        }
+                        break;
+                }
+            }else {
+                if(line.equals("IMPRIMIR")){
                     System.out.println(estrutura.print());
+                }else{
+                    System.out.println("Comando não existe!");
                 }
             }
         }

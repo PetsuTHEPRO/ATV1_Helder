@@ -60,7 +60,7 @@ public class Tree<T extends Comparable<T>> implements EstruturaDeDados<T>{
     }
 
     private boolean seekTree(NodoArvore<T> atual, T elemento, boolean encontrou) {
-        if (atual != null && !encontrou) { // Corrigi a condição para verificar se não encontrou ainda
+        if (atual != null && !encontrou) {
             encontrou = seekTree(atual.getNoEsquerdo(), elemento, encontrou);
             if (atual.getElemento().equals(elemento)) {
                 encontrou = true;
