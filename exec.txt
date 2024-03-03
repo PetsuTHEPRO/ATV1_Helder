@@ -1,0 +1,7 @@
+arvore
+REMOVER;lapis
+IMPRIMIR
+INSERIR;casa
+INSERIR;fone
+IMPRIMIR
+BUSCAR;escola
