@@ -63,27 +63,21 @@ BUSCAR; colher
 
 ## Funcionamento específico de cada tad:
 
-- Lista (duplamente encadeada)
-  - Possui classe NoDuplo com dois campos, "anterior" e "próximo";
-  - Inserir: Adiciona elemento ao final da lista;
-  - Remover: Remove o elemento passado por parâmetro em qualquer posição da lista;
-
-- Fila
-  - Possui classe NoSimples com um campo "próximo";
-  - Inserir: Adiciona elementoao final da fila;
-  - Remover: Remove o elemento no inicio da fila;
-
-- Pilha
-  - Possui classe NoSimples com um campo "próximo";
-  - Inserir: Adiciona elemento ao topo da pilha;
-  - Remover: Remove o elemento no topo da pilha(Não possui remover um item específico);
-
-- Arvore Binaria
-  - Possui classe NoArvore com dois campos, "esquerda" e "direita";
-  - Inserir: Adiciona elemento passando por um filtro de maior ou igual à direita e menor à
-  esquerda, simulando uma árvore binária de busca. (existe método na tad para adicionar
-  em algum local específico, só não foi implementado o funcionamento com a lógica dos
-  comandos simples;
-  - Remover: Remove o elemento passado por parâmetro em qualquer nó da arvore, exceto a raiz;
+- Lista (duplamente encadeada):
+  - Classe: NoDuplo com campos “anterior” e “próximo”.
+  - Inserir: Adiciona um elemento ao final da lista.
+  - Remover: Remove o elemento passado por parâmetro em qualquer posição da lista.
+- Fila:
+  - Classe: NoSimples com campo “próximo”.
+  - Inserir: Adiciona um elemento ao final da fila.
+  - Remover: Remove o elemento no início da fila.
+- Pilha:
+  - Classe: NoSimples com campo “próximo”.
+  - Inserir: Adiciona um elemento ao topo da pilha.
+  - Remover: Remove o elemento no topo da pilha (não permite remover um item específico).
+- Árvore Binária:
+  - Classe: NoArvore com campos “esquerda” e “direita”.
+  - Inserir: Adiciona um elemento seguindo a lógica de maior ou igual à direita e menor à esquerda, simulando uma árvore binária de busca.
+  - Remover: Remove o elemento passado por parâmetro em qualquer nó da árvore, exceto a raiz.
 
 **Os comandos Buscar e Imprimir funcionam de forma semelhante nas 4 estruturas!**
