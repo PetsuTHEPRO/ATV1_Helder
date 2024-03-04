@@ -1,11 +1,39 @@
 package Estruturas;
 
+import Util.EstruturaDeDados;
+
 import java.util.EmptyStackException;
 import java.util.List;
 
-public class Stack<T> implements EstruturaDeDados<T>{
+class NodoSimples<T>{
 
-    private Nodo<T> top;
+    private T elemento;
+    private NodoSimples<T> proximo;
+
+    public NodoSimples(){
+        this.elemento = null;
+        this.proximo = null;
+    }
+    public T getElemento() {
+        return elemento;
+    }
+
+    public void setElemento(T elemento) {
+        this.elemento = elemento;
+    }
+
+    public NodoSimples<T> getProximo() {
+        return proximo;
+    }
+
+    public void setProximo(NodoSimples<T> proximo) {
+        this.proximo = proximo;
+    }
+
+}
+public class Stack<T> implements EstruturaDeDados<T> {
+
+    private NodoSimples<T> top;
     private int tamanho;
 
     public Stack(List<T> dados){
@@ -29,12 +57,11 @@ public class Stack<T> implements EstruturaDeDados<T>{
     }
 
     public void push(T elemento) {
-        Nodo<T> novoNodo = new Nodo<>();
+        NodoSimples<T> novoNodo = new NodoSimples<>();
         novoNodo.setElemento(elemento);
 
         if (!isEmpty()) {
             novoNodo.setProximo(top);
-            top.setAnterior(novoNodo);
         }
         top = novoNodo;
         this.tamanho++;
@@ -47,20 +74,17 @@ public class Stack<T> implements EstruturaDeDados<T>{
 
         T elementoRemovido = top.getElemento();
         top = top.getProximo();
-
-        if (top != null) {
-            top.setAnterior(null);
-        }
+        this.tamanho--;
 
         return elementoRemovido;
     }
 
     public T remove(T elemento) {
-        return null;
+        return pop();
     }
 
     public boolean seek(T elemento) {
-        Nodo<T> nodoAtual = top;
+        NodoSimples<T> nodoAtual = top;
 
         while (nodoAtual != null) {
             T elementoAtual = nodoAtual.getElemento();
@@ -76,7 +100,7 @@ public class Stack<T> implements EstruturaDeDados<T>{
     public StringBuilder print(){
 
         StringBuilder sb = new StringBuilder();
-        Nodo<T> nodoAtual = top;
+        NodoSimples<T> nodoAtual = top;
 
         sb.append("[");
         while (nodoAtual != null) {

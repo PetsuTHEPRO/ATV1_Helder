@@ -1,10 +1,48 @@
 package Estruturas;
 
+import Util.EstruturaDeDados;
+
 import java.util.List;
 
-public class DoublyLinkedList<T> implements EstruturaDeDados<T>{
+class NodoDuplo<T>{
 
-    private Nodo<T> head;
+    private T elemento;
+    private NodoDuplo<T> proximo;
+    private NodoDuplo<T> anterior;
+
+    public NodoDuplo(){
+        this.elemento = null;
+        this.proximo = null;
+        this.anterior = null;
+    }
+    public T getElemento() {
+        return elemento;
+    }
+
+    public void setElemento(T elemento) {
+        this.elemento = elemento;
+    }
+
+    public NodoDuplo<T> getProximo() {
+        return proximo;
+    }
+
+    public void setProximo(NodoDuplo<T> proximo) {
+        this.proximo = proximo;
+    }
+
+    public NodoDuplo<T> getAnterior() {
+        return anterior;
+    }
+
+    public void setAnterior(NodoDuplo<T> anterior) {
+        this.anterior = anterior;
+    }
+
+}
+public class DoublyLinkedList<T> implements EstruturaDeDados<T> {
+
+    private NodoDuplo<T> head;
     private int tamanho;
 
     public DoublyLinkedList(List<T> dados){
@@ -26,14 +64,14 @@ public class DoublyLinkedList<T> implements EstruturaDeDados<T>{
     }
 
     public void add(T elemento) {
-        Nodo<T> newNodo = new Nodo<>();
+        NodoDuplo<T> newNodo = new NodoDuplo<>();
 
         newNodo.setElemento(elemento);
 
         if (isEmpty()) {
             head = newNodo;
         } else {
-            Nodo<T> nodoAtual = head;
+            NodoDuplo<T> nodoAtual = head;
             while (nodoAtual.getProximo() != null) {
                 nodoAtual = nodoAtual.getProximo();
             }
@@ -46,7 +84,7 @@ public class DoublyLinkedList<T> implements EstruturaDeDados<T>{
 
     public T remove(T elemento) {
 
-        Nodo<T> nodoAtual = head;
+        NodoDuplo<T> nodoAtual = head;
         T elementoRemovido;
 
         if(isEmpty()){
@@ -67,8 +105,8 @@ public class DoublyLinkedList<T> implements EstruturaDeDados<T>{
                     }else {
 
                         elementoRemovido = nodoAtual.getElemento();
-                        Nodo<T> anterior = nodoAtual.getAnterior();
-                        Nodo<T> proximo = nodoAtual.getProximo();
+                        NodoDuplo<T> anterior = nodoAtual.getAnterior();
+                        NodoDuplo<T> proximo = nodoAtual.getProximo();
 
                         if(anterior != null){
                             anterior.setProximo(proximo);
@@ -92,7 +130,7 @@ public class DoublyLinkedList<T> implements EstruturaDeDados<T>{
 
     public boolean seek(T elemento) {
 
-        Nodo<T> nodoAtual = head;
+        NodoDuplo<T> nodoAtual = head;
 
         if (!isEmpty()) {
             while(nodoAtual != null){
@@ -112,11 +150,11 @@ public class DoublyLinkedList<T> implements EstruturaDeDados<T>{
     public StringBuilder print(){
 
         StringBuilder sb = new StringBuilder();
-        Nodo<T> nodoAtual = head;
+        NodoDuplo<T> nodoAtual = head;
 
         sb.append("[ ");
         while (nodoAtual != null) {
-            sb.append(nodoAtual.getElemento() + " ");
+            sb.append(nodoAtual.getElemento()).append(" ");
             nodoAtual = nodoAtual.getProximo();
         }
         sb.append("]");
@@ -125,115 +163,3 @@ public class DoublyLinkedList<T> implements EstruturaDeDados<T>{
     }
 
 }
-
-/*
-
-typedef struct nodo *ptr_nodo;
-
-struct nodo {
-  elemento elem;
-  ptr_nodo prox;
-};
-
-typedef struct {
-  ptr_nodo lista;
-  int tamanho;
-} lista_encadeada;
-
-typedef lista_encadeada tipo_lista;
-
-int tamanho(lista_encadeada le) { return le.tamanho; }
-
-int obter_elemento(lista_encadeada le, int i, elemento *e) {
-    int j;
-    ptr_nodo pnodo;
-    if ((i <= le.tamanho) && (i > 0)) {
-        pnodo = le.lista;
-        for (j = 2; j <= i; j++)
-            pnodo = pnodo->prox;
-    *e = pnodo->elem;
-        return 1;
-    } else {
-    *e = VL_NULO;
-        return 0;
-    }
-}
-
-void inicializa_lista(lista_encadeada *le) {
-    le->tamanho = 0;
-    le->lista = NULL;
-}
-
-int incluir_elemento(lista_encadeada *le, int i, elemento e) {
-    int j;
-    ptr_nodo pnodo_incluido, pnodo_anterior;
-    if ((i <= le->tamanho + 1) && (i > 0)) {
-        pnodo_incluido = (ptr_nodo)malloc(sizeof(struct nodo));
-        if (pnodo_incluido == NULL)
-            return 0;
-        else {
-            pnodo_incluido->elem = e;
-            if (i == 1) {
-                pnodo_incluido->prox = le->lista;
-                le->lista = pnodo_incluido;
-            } else {
-                pnodo_anterior = le->lista;
-                for (j = 2; j < i; j++)
-                    pnodo_anterior = pnodo_anterior->prox;
-                pnodo_incluido->prox = pnodo_anterior->prox;
-                pnodo_anterior->prox = pnodo_incluido;
-            }
-            le->tamanho = le->tamanho + 1;
-            return 1;
-        }
-    } else
-        return 0;
-}
-
-int excluir_metade(tipo_lista *le) {
-    ptr_nodo pnodo_excluido;
-    int metade = tamanho(*le) / 2;
-    for (int i = 1; i <= metade; i++) // faça x vezes
-    {
-        pnodo_excluido = le->lista;
-        le->lista = le->lista->prox;
-        le->tamanho--;
-        free(pnodo_excluido);
-    }
-}
-
-int alterar_elemento(lista_encadeada *le, int i, elemento e) {
-    int j;
-    ptr_nodo pnodo;
-    if ((i <= le->tamanho) && (i > 0)) {
-        pnodo = le->lista;
-        for (j = 2; j <= i; j++)
-            pnodo = pnodo->prox;
-        pnodo->elem = e;
-        return 1;
-    } else
-        return 0;
-}
-
-int excluir_elemento(lista_encadeada *le, int i) {
-    int j;
-    ptr_nodo pnodo_excluido, pnodo_anterior;
-    if ((i <= le->tamanho) && (i > 0)) {
-        if (i == 1) {
-            pnodo_excluido = le->lista;
-            le->lista = pnodo_excluido->prox;
-        } else {
-            pnodo_anterior = le->lista;
-            for (j = 2; j < i; j++)
-                pnodo_anterior = pnodo_anterior->prox;
-            pnodo_excluido = pnodo_anterior->prox;
-            pnodo_anterior->prox = pnodo_excluido->prox;
-        }
-        free(pnodo_excluido);
-        le->tamanho = le->tamanho - 1;
-        return 1;
-    } else
-        return 0;
-}
-
-* */

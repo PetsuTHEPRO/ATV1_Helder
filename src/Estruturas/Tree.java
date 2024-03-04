@@ -1,8 +1,47 @@
 package Estruturas;
 
+import Util.EstruturaDeDados;
+
 import java.util.List;
 
-public class Tree<T extends Comparable<T>> implements EstruturaDeDados<T>{
+class NodoArvore<T> {
+
+    private T elemento;
+    private NodoArvore<T> noEsquerdo;
+    private NodoArvore<T> noDireito;
+
+    public void NodoArvore(){
+        elemento = null;
+        noDireito = null;
+        noEsquerdo = null;
+    }
+
+    public T getElemento() {
+        return elemento;
+    }
+
+    public void setElemento(T elemento) {
+        this.elemento = elemento;
+    }
+
+    public NodoArvore<T> getNoEsquerdo() {
+        return noEsquerdo;
+    }
+
+    public void setNoEsquerdo(NodoArvore<T> noEsquerdo) {
+        this.noEsquerdo = noEsquerdo;
+    }
+
+    public NodoArvore<T> getNoDireito() {
+        return noDireito;
+    }
+
+    public void setNoDireito(NodoArvore<T> noDireito) {
+        this.noDireito = noDireito;
+    }
+}
+
+public class Tree<T extends Comparable<T>> implements EstruturaDeDados<T> {
 
     private NodoArvore<T> raiz;
 
@@ -56,18 +95,19 @@ public class Tree<T extends Comparable<T>> implements EstruturaDeDados<T>{
 
     @Override
     public boolean seek(T elemento) {
-        return seekTree(raiz, elemento, false);
+        return seekTree(raiz, elemento);
     }
 
-    private boolean seekTree(NodoArvore<T> atual, T elemento, boolean encontrou) {
-        if (atual != null && !encontrou) {
-            encontrou = seekTree(atual.getNoEsquerdo(), elemento, encontrou);
-            if (atual.getElemento().equals(elemento)) {
-                encontrou = true;
-            }
-            encontrou = seekTree(atual.getNoDireito(), elemento, encontrou);
+    private boolean seekTree(NodoArvore<T> atual, T elemento) {
+        if(atual == null){
+            return false;
         }
-        return encontrou;
+
+        if(atual.getElemento().equals(elemento)){
+            return true;
+        }
+
+        return seekTree(atual.getNoEsquerdo(), elemento) || seekTree(atual.getNoDireito(), elemento);
     }
 
     @Override
@@ -87,19 +127,19 @@ public class Tree<T extends Comparable<T>> implements EstruturaDeDados<T>{
         }
     }
 
-    private void preOrdem(NodoArvore<T> atual){
+    private void preOrdem(NodoArvore<T> atual, StringBuilder sb){
         if (atual != null){
-            System.out.println(atual.getElemento());
-            preOrdem(atual.getNoEsquerdo());
-            preOrdem(atual.getNoDireito());
+            sb.append(atual.getElemento()).append(" ");
+            preOrdem(atual.getNoEsquerdo(), sb);
+            preOrdem(atual.getNoDireito(), sb);
         }
     }
 
-    private void posOrdem(NodoArvore<T> atual){
+    private void posOrdem(NodoArvore<T> atual, StringBuilder sb){
         if (atual != null){
-            posOrdem(atual.getNoEsquerdo());
-            posOrdem(atual.getNoDireito());
-            System.out.println(atual.getElemento());
+            posOrdem(atual.getNoEsquerdo(), sb);
+            posOrdem(atual.getNoDireito(), sb);
+            sb.append(atual.getElemento()).append(" ");
         }
     }
 

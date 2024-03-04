@@ -1,11 +1,39 @@
 package Estruturas;
 
+import Util.EstruturaDeDados;
+
 import java.util.List;
 
-public class Queue<T> implements EstruturaDeDados<T>{
+class Nodo<T>{
 
-    private Nodo<T> end;
-    private Nodo<T> start;
+    private T elemento;
+    private NodoSimples<T> proximo;
+
+    public Nodo(){
+        this.elemento = null;
+        this.proximo = null;
+    }
+    public T getElemento() {
+        return elemento;
+    }
+
+    public void setElemento(T elemento) {
+        this.elemento = elemento;
+    }
+
+    public NodoSimples<T> getProximo() {
+        return proximo;
+    }
+
+    public void setProximo(NodoSimples<T> proximo) {
+        this.proximo = proximo;
+    }
+}
+
+public class Queue<T> implements EstruturaDeDados<T> {
+
+    private NodoSimples<T> end;
+    private NodoSimples<T> start;
     private int tamanho;
 
     public Queue(List<T> dados){
@@ -33,7 +61,7 @@ public class Queue<T> implements EstruturaDeDados<T>{
     }
     public void enqueue(T elemento) {
 
-        Nodo<T> newNodo = new Nodo<>();
+        NodoSimples<T> newNodo = new NodoSimples<>();
         newNodo.setElemento(elemento);
 
         if (this.end == null){
@@ -60,32 +88,12 @@ public class Queue<T> implements EstruturaDeDados<T>{
     }
 
     public T remove(T elemento) {
-
-        T elementoRemovido = null;
-
-        if (!isEmpty()) {
-            if (start.getElemento().equals(elemento)) {
-                return dequeue();
-            }
-
-            Nodo<T> nodoAtual = start;
-            while (nodoAtual.getProximo() != null) {
-                if (nodoAtual.getProximo().getElemento().equals(elemento)) {
-                    elementoRemovido = nodoAtual.getProximo().getElemento();
-                    nodoAtual.setProximo(nodoAtual.getProximo().getProximo());
-                    break;
-                }
-
-                nodoAtual = nodoAtual.getProximo();
-            }
-        }
-
-        return elementoRemovido;
+        return dequeue();
     }
 
     public boolean seek(T elemento) {
 
-        Nodo<T> nodoAtual = start;
+        NodoSimples<T> nodoAtual = start;
         boolean encontrou = false;
 
         if (!isEmpty()) {
@@ -110,7 +118,7 @@ public class Queue<T> implements EstruturaDeDados<T>{
     public StringBuilder print(){
 
         StringBuilder sb = new StringBuilder();
-        Nodo<T> nodoAtual = start;
+        NodoSimples<T> nodoAtual = start;
 
         sb.append("[");
         while (nodoAtual != null) {

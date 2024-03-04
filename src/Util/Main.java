@@ -1,23 +1,21 @@
-import Arquivos.ManipulacaoArquivo;
+package Util;
+
 import Estruturas.DoublyLinkedList;
-import Estruturas.EstruturaDeDados;
 import Estruturas.Queue;
+import Estruturas.Stack;
 import Estruturas.Tree;
 
 import java.util.List;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
 
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
+
         ManipulacaoArquivo ma = new ManipulacaoArquivo();
         EstruturaDeDados<String> estrutura = null;
         
-        List<String> lines = ma.lerArquivo("exec.txt");
-        List<String> datas = ma.lerArquivo("dados.txt");
+        List<String> lines = ma.lerArquivo("src/Arquivos/exec.txt");
+        List<String> datas = ma.lerArquivo("src/Arquivos/dados.txt");
 
         String estruturaDeDados = lines.remove(0);
 
@@ -28,7 +26,7 @@ public class Main {
                 break;
             case "pilha":
                 System.out.println("Pilha");
-                //estrutura = new Stack<>(datas);
+                estrutura = new Stack<>(datas);
                 break;
             case "fila":
                 System.out.println("Fila");
@@ -56,26 +54,35 @@ public class Main {
                 switch(comando){
                     case "INSERIR":
                         estrutura.add(dado);
+                        if(dado != null){
+                            System.out.println("INSERIR -> " + dado);
+                        }
                         break;
                     case "REMOVER":
                         String dadoRemovido = estrutura.remove(dado);
                         if(dado != null){
-                            System.out.println("Item Removido: " + dadoRemovido);
+
+                            if(dadoRemovido == null){
+                                System.out.println("REMOVER -> Item não está na lista: " + dado);
+                            }else{
+                                System.out.println("REMOVIDO -> " + dadoRemovido);
+                            }
+
                         }else{
-                            System.out.println("Remover Error: Item não encontrado! [" + dadoRemovido + "]");
+                            System.out.println("REMOVER: Item não encontrado! [" + dadoRemovido + "]");
                         }
                         break;
                     case "BUSCAR":
                         if(estrutura.seek(dado)){
-                            System.out.println("Esse dado contém na lista!");
+                            System.out.println("BUSCAR -> Encontrou: " + dado);
                         }else{
-                            System.out.println("Esse dado não contém na lista!");
+                            System.out.println("BUSCAR -> Não Encontrou: " + dado);
                         }
                         break;
                 }
             }else {
                 if(line.equals("IMPRIMIR")){
-                    System.out.println(estrutura.print());
+                    System.out.println("IMPRIMIR -> " + estrutura.print());
                 }else{
                     System.out.println("Comando não existe!");
                 }

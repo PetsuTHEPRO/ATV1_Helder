@@ -1,4 +1,4 @@
-package Estruturas;
+package Util;
 
 import java.util.List;
 
