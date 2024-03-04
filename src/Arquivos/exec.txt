@@ -1,8 +1,9 @@
-pilha
-REMOVER;lapis
+arvore
 IMPRIMIR
 INSERIR;casa
+REMOVER;casa
 INSERIR;fone
 IMPRIMIR
 BUSCAR;casa
-REMOVER;lapis
+REMOVER;casa
+IMPRIMIR

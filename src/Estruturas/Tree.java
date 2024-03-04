@@ -90,7 +90,67 @@ public class Tree<T extends Comparable<T>> implements EstruturaDeDados<T> {
 
     @Override
     public T remove(T elemento) {
-        return null;
+        NodoArvore<T> atual = this.raiz;
+        NodoArvore<T> paiAtual = null;
+
+        // Encontrar o nó a ser removido
+        while (atual != null) {
+            int comparacao = elemento.compareTo(atual.getElemento());
+            if (comparacao == 0) {
+                break; // Elemento encontrado
+            } else if (comparacao < 0) {
+                paiAtual = atual;
+                atual = atual.getNoEsquerdo();
+            } else {
+                paiAtual = atual;
+                atual = atual.getNoDireito();
+            }
+        }
+
+        if (atual == null) {
+            return null; // Elemento não encontrado
+        }
+
+        // Caso 1: Sem filhos ou apenas um filho
+        if (atual.getNoEsquerdo() == null) {
+            if (paiAtual == null) {
+                this.raiz = atual.getNoDireito();
+            } else if (paiAtual.getNoEsquerdo() == atual) {
+                paiAtual.setNoEsquerdo(atual.getNoDireito());
+            } else {
+                paiAtual.setNoDireito(atual.getNoDireito());
+            }
+        } else if (atual.getNoDireito() == null) {
+            if (paiAtual == null) {
+                this.raiz = atual.getNoEsquerdo();
+            } else if (paiAtual.getNoEsquerdo() == atual) {
+                paiAtual.setNoEsquerdo(atual.getNoEsquerdo());
+            } else {
+                paiAtual.setNoDireito(atual.getNoEsquerdo());
+            }
+        } else {
+            // Caso 2: Dois filhos
+            T sucessor = encontrarSucessor(atual.getNoDireito());
+            atual.setElemento(sucessor);
+            atual.setNoDireito(removerSucessor(atual.getNoDireito()));
+        }
+
+        return elemento;
+    }
+
+    private T encontrarSucessor(NodoArvore<T> atual) {
+        while (atual.getNoEsquerdo() != null) {
+            atual = atual.getNoEsquerdo();
+        }
+        return atual.getElemento();
+    }
+
+    private NodoArvore<T> removerSucessor(NodoArvore<T> atual) {
+        if (atual.getNoEsquerdo() == null) {
+            return atual.getNoDireito();
+        }
+        atual.setNoEsquerdo(removerSucessor(atual.getNoEsquerdo()));
+        return atual;
     }
 
     @Override
