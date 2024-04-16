@@ -1,19 +1,18 @@
 package Estruturas;
 
 import Util.EstruturaDeDados;
-
 import java.util.List;
 
-class NodoArvore<T> {
+class NodoArvore<T extends Comparable<T>> {
 
     private T elemento;
     private NodoArvore<T> noEsquerdo;
     private NodoArvore<T> noDireito;
 
-    public void NodoArvore(){
-        elemento = null;
-        noDireito = null;
+    public NodoArvore(T elemento) {
+        this.elemento = elemento;
         noEsquerdo = null;
+        noDireito = null;
     }
 
     public T getElemento() {
@@ -45,33 +44,34 @@ public class Tree<T extends Comparable<T>> implements EstruturaDeDados<T> {
 
     private NodoArvore<T> raiz;
 
-    public Tree(List<T> dados){
+    public Tree(List<T> dados) {
         raiz = null;
         criarEstrutura(dados);
     }
 
     public void add(T elemento) {
-        NodoArvore<T> noAtual = new NodoArvore<>();
-        noAtual.setElemento(elemento);
+        NodoArvore<T> noAtual = new NodoArvore<>(elemento);
 
         if (raiz == null) {
-            this.raiz = noAtual;
+            raiz = noAtual;
         } else {
-            NodoArvore<T> atual = this.raiz;
+            NodoArvore<T> atual = raiz;
+            NodoArvore<T> paiAtual = null;
+
             while (true) {
-                int comparacao = noAtual.getElemento().compareTo(atual.getElemento());
+                int comparacao = elemento.compareTo(atual.getElemento());
                 if (comparacao < 0) {
-                    if (atual.getNoEsquerdo() != null) {
-                        atual = atual.getNoEsquerdo();
-                     } else {
-                        atual.setNoEsquerdo(noAtual);
+                    paiAtual = atual;
+                    atual = atual.getNoEsquerdo();
+                    if (atual == null) {
+                        paiAtual.setNoEsquerdo(noAtual);
                         break;
                     }
                 } else {
-                    if (atual.getNoDireito() != null) {
-                        atual = atual.getNoDireito();
-                    } else {
-                        atual.setNoDireito(noAtual);
+                    paiAtual = atual;
+                    atual = atual.getNoDireito();
+                    if (atual == null) {
+                        paiAtual.setNoDireito(noAtual);
                         break;
                     }
                 }
@@ -81,23 +81,20 @@ public class Tree<T extends Comparable<T>> implements EstruturaDeDados<T> {
 
     @Override
     public void criarEstrutura(List<T> dados) {
-
-        for(T dado : dados){
+        for (T dado : dados) {
             add(dado);
         }
-
     }
 
     @Override
     public T remove(T elemento) {
-        NodoArvore<T> atual = this.raiz;
+        NodoArvore<T> atual = raiz;
         NodoArvore<T> paiAtual = null;
 
-        // Encontrar o nó a ser removido
         while (atual != null) {
             int comparacao = elemento.compareTo(atual.getElemento());
             if (comparacao == 0) {
-                break; // Elemento encontrado
+                break;
             } else if (comparacao < 0) {
                 paiAtual = atual;
                 atual = atual.getNoEsquerdo();
@@ -108,13 +105,20 @@ public class Tree<T extends Comparable<T>> implements EstruturaDeDados<T> {
         }
 
         if (atual == null) {
-            return null; // Elemento não encontrado
+            return null;
         }
 
-        // Caso 1: Sem filhos ou apenas um filho
-        if (atual.getNoEsquerdo() == null) {
+        if (atual.getNoEsquerdo() == null && atual.getNoDireito() == null) {
             if (paiAtual == null) {
-                this.raiz = atual.getNoDireito();
+                raiz = null;
+            } else if (paiAtual.getNoEsquerdo() == atual) {
+                paiAtual.setNoEsquerdo(null);
+            } else {
+                paiAtual.setNoDireito(null);
+            }
+        } else if (atual.getNoEsquerdo() == null) {
+            if (paiAtual == null) {
+                raiz = atual.getNoDireito();
             } else if (paiAtual.getNoEsquerdo() == atual) {
                 paiAtual.setNoEsquerdo(atual.getNoDireito());
             } else {
@@ -122,15 +126,14 @@ public class Tree<T extends Comparable<T>> implements EstruturaDeDados<T> {
             }
         } else if (atual.getNoDireito() == null) {
             if (paiAtual == null) {
-                this.raiz = atual.getNoEsquerdo();
+                raiz = atual.getNoEsquerdo();
             } else if (paiAtual.getNoEsquerdo() == atual) {
                 paiAtual.setNoEsquerdo(atual.getNoEsquerdo());
             } else {
                 paiAtual.setNoDireito(atual.getNoEsquerdo());
             }
         } else {
-            // Caso 2: Dois filhos
-            T sucessor = encontrarSucessor(atual.getNoDireito());
+            T sucessor = encontrarSucessor(atual);
             atual.setElemento(sucessor);
             atual.setNoDireito(removerSucessor(atual.getNoDireito()));
         }
@@ -148,59 +151,3 @@ public class Tree<T extends Comparable<T>> implements EstruturaDeDados<T> {
     private NodoArvore<T> removerSucessor(NodoArvore<T> atual) {
         if (atual.getNoEsquerdo() == null) {
             return atual.getNoDireito();
-        }
-        atual.setNoEsquerdo(removerSucessor(atual.getNoEsquerdo()));
-        return atual;
-    }
-
-    @Override
-    public boolean seek(T elemento) {
-        return seekTree(raiz, elemento);
-    }
-
-    private boolean seekTree(NodoArvore<T> atual, T elemento) {
-        if(atual == null){
-            return false;
-        }
-
-        if(atual.getElemento().equals(elemento)){
-            return true;
-        }
-
-        return seekTree(atual.getNoEsquerdo(), elemento) || seekTree(atual.getNoDireito(), elemento);
-    }
-
-    @Override
-    public StringBuilder print() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[ ");
-        emOrdem(raiz, sb);
-        sb.append("]");
-        return sb;
-    }
-
-    private void emOrdem(NodoArvore<T> atual, StringBuilder sb){
-        if (atual != null){
-            emOrdem(atual.getNoEsquerdo(), sb);
-            sb.append(atual.getElemento()).append(" ");
-            emOrdem(atual.getNoDireito(), sb);
-        }
-    }
-
-    private void preOrdem(NodoArvore<T> atual, StringBuilder sb){
-        if (atual != null){
-            sb.append(atual.getElemento()).append(" ");
-            preOrdem(atual.getNoEsquerdo(), sb);
-            preOrdem(atual.getNoDireito(), sb);
-        }
-    }
-
-    private void posOrdem(NodoArvore<T> atual, StringBuilder sb){
-        if (atual != null){
-            posOrdem(atual.getNoEsquerdo(), sb);
-            posOrdem(atual.getNoDireito(), sb);
-            sb.append(atual.getElemento()).append(" ");
-        }
-    }
-
-}
