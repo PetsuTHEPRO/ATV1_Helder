@@ -10,8 +10,8 @@ class NodoDuplo<T>{
     private NodoDuplo<T> proximo;
     private NodoDuplo<T> anterior;
 
-    public NodoDuplo(){
-        this.elemento = null;
+    public NodoDuplo(T elemento){
+        this.elemento = elemento;
         this.proximo = null;
         this.anterior = null;
     }
@@ -45,9 +45,13 @@ public class DoublyLinkedList<T> implements EstruturaDeDados<T> {
     private NodoDuplo<T> head;
     private int tamanho;
 
-    public DoublyLinkedList(List<T> dados){
-        this.tamanho = 0;
+    public DoublyLinkedList(){
         this.head = null;
+        this.tamanho = 0;
+    }
+
+    public DoublyLinkedList(List<T> dados){
+        this();
         criarEstrutura(dados);
     }
 
@@ -64,9 +68,7 @@ public class DoublyLinkedList<T> implements EstruturaDeDados<T> {
     }
 
     public void add(T elemento) {
-        NodoDuplo<T> newNodo = new NodoDuplo<>();
-
-        newNodo.setElemento(elemento);
+        NodoDuplo<T> newNodo = new NodoDuplo<>(elemento);
 
         if (isEmpty()) {
             head = newNodo;
@@ -85,7 +87,7 @@ public class DoublyLinkedList<T> implements EstruturaDeDados<T> {
     public T remove(T elemento) {
 
         NodoDuplo<T> nodoAtual = head;
-        T elementoRemovido;
+        T elementoRemovido = null;
 
         if(isEmpty()){
             return null;
@@ -99,7 +101,7 @@ public class DoublyLinkedList<T> implements EstruturaDeDados<T> {
                         elementoRemovido = nodoAtual.getElemento();
                         head = nodoAtual.getProximo();
                         if(head != null){
-                            nodoAtual.setAnterior(null);
+                            nodoAtual.getProximo().setAnterior(null);
                         }
 
                     }else {
@@ -119,13 +121,13 @@ public class DoublyLinkedList<T> implements EstruturaDeDados<T> {
                     }
 
                     this.tamanho--;
-                    return elementoRemovido;
+                    break;
                 }
                 nodoAtual = nodoAtual.getProximo();
             }
         }
 
-        return null;
+        return elementoRemovido;
     }
 
     public boolean seek(T elemento) {
