@@ -6,25 +6,26 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-public class ManipulacaoArquivo {
 
-    private List<String> linhas;
-    private Path arquivo;
-    public ManipulacaoArquivo(){
-        linhas = new ArrayList<>();
+public class ManipulationFile {
+
+    private List<String> lines;
+    private Path filePath;
+
+    public ManipulationFile() {
+        lines = new ArrayList<>();
     }
 
-    public List<String> lerArquivo(String path){
+    public List<String> readFile(String filePath) {
+        this.filePath = Paths.get(filePath);
 
-        arquivo = Paths.get(path);
-
-        try{
-            linhas = Files.readAllLines(arquivo);
-        }catch(IOException io){
-            io.printStackTrace();
+        try {
+            this.lines = Files.readAllLines(this.filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        return linhas;
+        return lines;
     }
 
 }
