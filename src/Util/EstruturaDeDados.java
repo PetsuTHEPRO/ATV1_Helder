@@ -1,12 +1,13 @@
-package Util;
+package util;
 
 import java.util.List;
 
-public interface EstruturaDeDados<T> {
+public interface DataStructure<T> {
 
-    void criarEstrutura(List<T> dados);
-    void add(T elemento);
-    T remove(T elemento);
-    boolean seek(T elemento);
+    void createStructure(List<T> data);
+    void add(T element);
+    T remove(T element);
+    boolean contains(T element);
+    T get(T element);
     StringBuilder print();
 }
